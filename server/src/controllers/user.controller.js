@@ -1,6 +1,6 @@
-import responseHandler from '../handlers/response.handler';
+import responseHandler from '../handlers/response.handler.js';
 import jsonwebtoken from 'jsonwebtoken';
-import userModel from '../models/user.model';
+import userModel from '../models/user.model.js';
 
 const signUp = async (req, res) => {
     try {
