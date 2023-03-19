@@ -14,35 +14,32 @@ router.post(
         .exists()
         .withMessage('username is required')
         .isLength({ min: 8 })
-        .withMessage('username minium 8 characters')
+        .withMessage('username minimum 8 characters')
         .custom(async (value) => {
             const user = await userModel.findOne({ username: value });
-            if (user) {
-                return Promise.reject('username already used');
-            }
+            if (user) return Promise.reject('username already used');
         }),
     body('password')
         .exists()
         .withMessage('password is required')
         .isLength({ min: 8 })
-        .withMessage('Password minium 8 characters'),
+        .withMessage('password minimum 8 characters'),
     body('confirmPassword')
         .exists()
-        .withMessage('Confirm password is required')
+        .withMessage('confirmPassword is required')
         .isLength({ min: 8 })
-        .withMessage('Confirm password minium 8 characters')
-        .custom(async (value, { req }) => {
-            if (value !== req.body.password) throw new Error('Confirm password not match');
+        .withMessage('confirmPassword minimum 8 characters')
+        .custom((value, { req }) => {
+            if (value !== req.body.password) throw new Error('confirmPassword not match');
             return true;
         }),
     body('displayName')
         .exists()
-        .withMessage('Display name is required')
+        .withMessage('displayName is required')
         .isLength({ min: 8 })
-        .withMessage('Display name minium 8 characters'),
-
+        .withMessage('displayName minimum 8 characters'),
     requestHandler.validate,
-    userController.signUp,
+    userController.signup,
 );
 
 router.post(
@@ -58,7 +55,7 @@ router.post(
         .isLength({ min: 8 })
         .withMessage('password minimum 8 characters'),
     requestHandler.validate,
-    userController.signIn,
+    userController.signin,
 );
 
 router.put(

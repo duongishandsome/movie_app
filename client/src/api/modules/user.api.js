@@ -1,11 +1,11 @@
-import publicClient from '../client/public.client.js';
-import privateClient from '../client/private.client.js';
+import privateClient from '../client/private.client';
+import publicClient from '../client/public.client';
 
 const userEndpoints = {
-    signin: 'user/sigin',
+    signin: 'user/signin',
     signup: 'user/signup',
     getInfo: 'user/info',
-    passwordUpdate: 'user/password-update',
+    passwordUpdate: 'user/update-password',
 };
 
 const userApi = {
@@ -22,6 +22,7 @@ const userApi = {
     },
     signup: async ({ username, password, confirmPassword, displayName }) => {
         try {
+            console.log('send request', { username, password, confirmPassword, displayName });
             const response = await publicClient.post(userEndpoints.signup, {
                 username,
                 password,
@@ -31,6 +32,7 @@ const userApi = {
 
             return { response };
         } catch (err) {
+            console.log('err');
             return { err };
         }
     },

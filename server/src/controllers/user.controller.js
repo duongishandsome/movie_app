@@ -1,48 +1,46 @@
-import responseHandler from '../handlers/response.handler.js';
-import jsonwebtoken from 'jsonwebtoken';
 import userModel from '../models/user.model.js';
+import jsonwebtoken from 'jsonwebtoken';
+import responseHandler from '../handlers/response.handler.js';
 
-const signUp = async (req, res) => {
+const signup = async (req, res) => {
     try {
-        const { username, displayName, password } = req.body;
+        const { username, password, displayName } = req.body;
+
         const checkUser = await userModel.findOne({ username });
-        if (checkUser) return responseHandler.badrequest(res, 'Username already used');
+
+        if (checkUser) return responseHandler.badrequest(res, 'username already used');
 
         const user = new userModel();
-        user.username = username;
+
         user.displayName = displayName;
-        user.password = setPassword(password);
+        user.username = username;
+        user.setPassword(password);
 
-        await user.save;
+        await user.save();
 
-        const token = jsonwebtoken.sign({ data: user.id }, process.env.SECRET_TOKE, {
-            expiresIn: '24h',
-        });
+        const token = jsonwebtoken.sign({ data: user.id }, process.env.TOKEN_SECRET, { expiresIn: '24h' });
 
         responseHandler.created(res, {
             token,
             ...user._doc,
             id: user.id,
         });
-    } catch (error) {
+    } catch {
         responseHandler.error(res);
     }
 };
 
-const signIn = async (req, res) => {
+const signin = async (req, res) => {
     try {
         const { username, password } = req.body;
-        const user = await userModel.findOne({ username }).select('user password aslt displayname id ');
-        if (!user) {
-            return responseHandler.badrequest(res, 'User not found');
-        }
 
-        if (user.validPassword(password)) {
-            return responseHandler.badrequest(res, 'Wrong Password');
-        }
-        const token = jsonwebtoken.sign({ data: user.id }, process.env.SECRET_TOKE, {
-            expiresIn: '24h',
-        });
+        const user = await userModel.findOne({ username }).select('username password salt id displayName');
+
+        if (!user) return responseHandler.badrequest(res, 'User not exist');
+
+        if (!user.validPassword(password)) return responseHandler.badrequest(res, 'Wrong password');
+
+        const token = jsonwebtoken.sign({ data: user.id }, process.env.TOKEN_SECRET, { expiresIn: '24h' });
 
         user.password = undefined;
         user.salt = undefined;
@@ -52,7 +50,7 @@ const signIn = async (req, res) => {
             ...user._doc,
             id: user.id,
         });
-    } catch (error) {
+    } catch {
         responseHandler.error(res);
     }
 };
@@ -60,41 +58,38 @@ const signIn = async (req, res) => {
 const updatePassword = async (req, res) => {
     try {
         const { password, newPassword } = req.body;
-        const user = userModel.findById(req.user.id).select('password salt id');
-        if (!user) {
-            return responseHandler.unauthorize(res);
-        }
 
-        if (!user.validPassword(password)) {
-            return responseHandler.badrequest(res, 'Wrong password');
-        }
+        const user = await userModel.findById(req.user.id).select('password id salt');
+
+        if (!user) return responseHandler.unauthorize(res);
+
+        if (!user.validPassword(password)) return responseHandler.badrequest(res, 'Wrong password');
 
         user.setPassword(newPassword);
 
         await user.save();
 
         responseHandler.ok(res);
-    } catch (error) {
-        responseHandler.error(error);
+    } catch {
+        responseHandler.error(res);
     }
 };
 
-const getInfo = async () => {
+const getInfo = async (req, res) => {
     try {
         const user = await userModel.findById(req.user.id);
 
-        if (!user) {
-            responseHandler.notfound(res);
-        }
+        if (!user) return responseHandler.notfound(res);
+
         responseHandler.ok(res, user);
-    } catch (error) {
-        responseHandler.error(error);
+    } catch {
+        responseHandler.error(res);
     }
 };
 
 export default {
-    signUp,
-    signIn,
-    updatePassword,
+    signup,
+    signin,
     getInfo,
+    updatePassword,
 };

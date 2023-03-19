@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import modelOptions from './models.options.js';
+import modelOptions from './model.options.js';
 
 const favoriteSchema = new Schema(
     {
