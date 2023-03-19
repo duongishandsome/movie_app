@@ -9,7 +9,7 @@ const Logo = () => {
             fontSize="1.7rem"
             component={Link}
             to="/"
-            style={{ textDecoration: 'none', color: 'white' }}
+            style={{ textDecoration: 'none', color: 'inherit' }}
         >
             Movie<span style={{ color: theme.palette.primary.main }}>Chill</span>
         </Typography>
