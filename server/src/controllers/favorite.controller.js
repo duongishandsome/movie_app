@@ -31,10 +31,9 @@ const removeFavorite = async (req, res) => {
             user: req.user.id,
             _id: favoriteId,
         });
-
         if (!favorite) return responseHandler.notfound(res);
 
-        await favorite.remove();
+        await favorite.deleteOne();
 
         responseHandler.ok(res);
     } catch {
