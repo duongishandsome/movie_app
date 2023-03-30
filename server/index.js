@@ -34,16 +34,3 @@ app.use('/api/v1', routes);
 const PORT = process.env.PORT || 5000;
 
 const server = http.createServer(app);
-
-// Set Access-Control-Allow-Origin header
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    next();
-});
-
-// Set other CORS headers
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-});
