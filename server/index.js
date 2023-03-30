@@ -8,6 +8,22 @@ import routes from './src/routes/index.js';
 
 const app = express();
 
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGODB_URL);
+        console.log('MongoDB connected!');
+
+        server.listen(PORT, () => {
+            console.log(`Server is listening on port ${PORT}`);
+        });
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+};
+
+connectDB();
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -31,19 +47,3 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
-
-const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGODB_URL);
-        console.log('MongoDB connected!');
-
-        server.listen(PORT, () => {
-            console.log(`Server is listening on port ${PORT}`);
-        });
-    } catch (error) {
-        console.log(error);
-        process.exit(1);
-    }
-};
-
-connectDB();
