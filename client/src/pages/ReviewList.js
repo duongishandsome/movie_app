@@ -14,7 +14,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { routesGen } from '../routes/routes';
 
 const ReviewItem = ({ review, onRemoved }) => {
-    console.log('sss', review);
     const [onRequest, setOnRequest] = useState(false);
 
     const onRemove = async () => {
@@ -119,7 +118,7 @@ const ReviewList = () => {
         };
 
         getReviews();
-    }, []);
+    }, [dispatch]);
 
     const onLoadMore = () => {
         setFilteredReviews([...filteredReviews, ...[...reviews].splice(page * skip, skip)]);
@@ -134,8 +133,6 @@ const ReviewList = () => {
         setFilteredReviews([...newReviews].splice(0, page * skip));
         setCount(count - 1);
     };
-
-    console.log('ss', reviews);
 
     return (
         <Box sx={{ ...uiConfigs.style.mainContent }}>
