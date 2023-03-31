@@ -2,7 +2,7 @@
 # Title and Description
 
 ####  MovieChill
-
+    - Đăng ký tài khoản để trải nghiệm 
     - Mô tả chức năng chính:
      CRUD bình luận, phim yêu thích
      Đăng nhập xác thực
@@ -20,7 +20,8 @@
 
 ## Deploy
 
-Đang gặp lỗi
+Link website:  https://movie-chill.vercel.app/
+server: https://movie-app-api-hazel.vercel.app/api/v1/movie/popular
 
 
 
@@ -30,6 +31,7 @@
 MERN stack
 - Front-end: Material-ui, Javascript, React Js, react-router 6, Redux...
 - Back-end: Node Js (Express Js), mô hình MCV, Mongodb, themoviedb...
+
 
 ## Demo
 ![1](https://github.com/duongishandsome/TheBandF8/blob/master/img_store/img_1.jpg?raw=true)
